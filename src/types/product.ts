@@ -1,4 +1,3 @@
-
 export interface Product {
   id: number;
   slug: string;
@@ -24,3 +23,9 @@ export interface Market {
   price: number;
 }
 
+export interface Market {
+  market: string;
+  division: string;
+  min: number;
+  max: number;
+}
