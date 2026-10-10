@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { getAllProducts } from "@/lib/api";
 import type { Product } from "@/types/product";
+import TickerItems from "./TickerItems";
 
 export default async function PriceTicker() {
   const response = await getAllProducts();
@@ -20,57 +21,11 @@ export default async function PriceTicker() {
         </div>
 
         {/* Ticker Products */}
-        <div className="flex w-max animate-ticker-scroll items-center hover:[animation-play-state:paused]">
-          {[...products, ...products].map((product, index) => (
-            <Link
-              key={`${product.id}-${index}`}
-              href={`/product/${product.slug}`}
-              className="flex shrink-0 items-center gap-1 px-2 py-2 text-[10px] sm:gap-2 sm:px-5 sm:py-3 sm:text-sm"
-            >
-              {/* Product Emoji */}
-              <span className="text-xs sm:text-base">
-                {product.image}
-              </span>
-
-              {/* Product Name */}
-              <span className="font-medium text-gray-800">
-                {product.nameBn}
-              </span>
-
-              {/* Product Price */}
-              <span className="font-semibold text-gray-900">
-                ৳{product.today.toLocaleString("bn-BD")}/{product.unit}
-              </span>
-
-              {/* Price Increased */}
-              {product.change.dir === "up" && (
-                <span className="font-semibold text-red-600">
-                  ▲{" "}
-                  {Math.abs(product.change.pct).toLocaleString("bn-BD")}%
-                </span>
-              )}
-
-              {/* Price Decreased */}
-              {product.change.dir === "down" && (
-                <span className="font-semibold text-green-600">
-                  ▼{" "}
-                  {Math.abs(product.change.pct).toLocaleString("bn-BD")}%
-                </span>
-              )}
-
-              {/* Price Unchanged */}
-              {product.change.dir === "flat" && (
-                <span className="font-semibold text-gray-500">
-                  — ০%
-                </span>
-              )}
-
-              {/* Separator */}
-              <span className="text-gray-300">|</span>
-            </Link>
-          ))}
+        <div className="min-w-0 flex-1 overflow-hidden">
+          <TickerItems products={products} />
         </div>
       </div>
     </div>
   );
 }
+
