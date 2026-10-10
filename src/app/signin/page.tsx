@@ -3,10 +3,14 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { signIn } from "@/lib/auth-client";
+import toast from "react-hot-toast";
 import SocialLogin from "@/components/auth/SocialLogin";
 
 export default function SignInPage() {
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -14,6 +18,7 @@ export default function SignInPage() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
     setError("");
     setLoading(true);
 
@@ -24,13 +29,24 @@ export default function SignInPage() {
       });
 
       if (result.error) {
-        setError(result.error.message ?? "Sign In করা যায়নি।");
+        const message =
+          result.error.message ?? "Sign In করা যায়নি।";
+
+        setError(message);
+        toast.error(message);
         return;
       }
 
-      window.location.href = "/";
+      toast.success("সফলভাবে Sign In হয়েছে!");
+
+      router.push("/");
+      router.refresh();
     } catch {
-      setError("সমস্যা হয়েছে। Email ও password পরীক্ষা করে আবার চেষ্টা করো।");
+      const message =
+        "সমস্যা হয়েছে। Email ও password পরীক্ষা করে আবার চেষ্টা করো।";
+
+      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -52,10 +68,11 @@ export default function SignInPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Email */}
           <div>
             <label
               htmlFor="email"
-              className="mb-1 block text-sm font-medium"
+              className="mb-1 block text-sm font-medium text-gray-700"
             >
               Email address
             </label>
@@ -72,10 +89,11 @@ export default function SignInPage() {
             />
           </div>
 
+          {/* Password */}
           <div>
             <label
               htmlFor="password"
-              className="mb-1 block text-sm font-medium"
+              className="mb-1 block text-sm font-medium text-gray-700"
             >
               Password
             </label>
@@ -92,6 +110,7 @@ export default function SignInPage() {
             />
           </div>
 
+          {/* Error Message */}
           {error && (
             <p
               role="alert"
@@ -101,6 +120,7 @@ export default function SignInPage() {
             </p>
           )}
 
+          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}

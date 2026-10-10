@@ -18,7 +18,7 @@ export default async function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b bg-white shadow-sm">
       <div className="mx-auto max-w-7xl px-4">
-        <div className="flex flex-wrap items-center justify-between gap-4 py-4">
+        <div className="flex items-center justify-between gap-4 py-4">
           <Link href="/" className="flex items-center gap-2">
             <span className="text-3xl">🛒</span>
 
@@ -27,7 +27,7 @@ export default async function Navbar() {
                 বাজার দর
               </h1>
 
-              <p className="text-xs text-gray-500">
+              <p className=" text-[10px] lg:text-xs text-gray-500">
                 {today}
               </p>
             </div>

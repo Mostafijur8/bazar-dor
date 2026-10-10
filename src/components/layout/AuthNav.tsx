@@ -3,10 +3,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useSession, signOut } from "@/lib/auth-client";
 import toast from "react-hot-toast";
 
 export default function AuthNav() {
+  const router = useRouter();
   const { data: session, isPending } = useSession();
 
   async function handleSignOut() {
@@ -19,7 +21,8 @@ export default function AuthNav() {
       }
 
       toast.success("সফলভাবে Sign Out হয়েছে!");
-      window.location.href = "/";
+      router.push("/");
+      router.refresh();
     } catch {
       toast.error("সমস্যা হয়েছে। আবার চেষ্টা করো।");
     }
@@ -27,39 +30,50 @@ export default function AuthNav() {
 
   if (isPending) {
     return (
-      <div className="h-10 w-32 animate-pulse rounded-lg bg-gray-100" />
+      <div className="h-8 w-24 animate-pulse rounded-lg bg-gray-100 sm:h-10 sm:w-32" />
     );
   }
 
   if (session?.user) {
     return (
-      <div className="flex items-center gap-3">
+      <div className="flex min-w-0 items-center justify-end gap-2 sm:gap-4">
+        {/* Profile */}
         <Link
           href="/profile"
-          className="flex items-center gap-2 rounded-lg px-2 py-1.5 transition hover:bg-gray-50"
+          className="flex min-w-0 items-center gap-1.5 rounded-lg p-1 transition hover:bg-gray-50 sm:gap-2 sm:p-2"
         >
+          {/* Profile Image */}
           {session.user.image ? (
             <Image
               src={session.user.image}
               alt={session.user.name || "Profile"}
               width={36}
               height={36}
-              className="h-9 w-9 rounded-full object-cover"
+              className="h-7 w-7 shrink-0 rounded-full object-cover sm:h-9 sm:w-9"
             />
           ) : (
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-green-100 text-sm font-bold text-green-700">
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-green-100 text-xs font-bold text-green-700 sm:h-9 sm:w-9 sm:text-sm">
               {session.user.name?.charAt(0).toUpperCase() || "U"}
             </div>
           )}
 
-          <span className="max-w-36 truncate text-sm font-medium text-gray-700 hover:text-green-700">
-            {session.user.name || session.user.email}
-          </span>
+          {/* Name and Email: Desktop + Mobile */}
+          <div className="min-w-0">
+            <p className="max-w-24 truncate text-xs font-semibold text-gray-700 sm:max-w-36 sm:text-sm">
+              {session.user.name || "User"}
+            </p>
+
+            <p className="max-w-24 truncate text-[10px] text-gray-500 sm:max-w-40 sm:text-xs">
+              {session.user.email}
+            </p>
+          </div>
         </Link>
 
+        {/* Sign Out */}
         <button
+          type="button"
           onClick={handleSignOut}
-          className="rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-50"
+          className="shrink-0 rounded-lg border border-red-200 px-2 py-1.5 text-[10px] font-medium text-red-600 transition hover:bg-red-50 sm:px-3 sm:py-2 sm:text-sm"
         >
           Sign Out
         </button>
@@ -68,21 +82,20 @@ export default function AuthNav() {
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1.5 sm:gap-2">
       <Link
         href="/signin"
-        className="rounded-lg border border-green-600 px-3 py-2 text-sm font-medium text-green-700 hover:bg-green-50"
+        className="shrink-0 rounded-lg border border-green-600 px-2 py-1.5 text-xs font-medium text-green-700 transition hover:bg-green-50 sm:px-3 sm:py-2 sm:text-sm"
       >
         Sign In
       </Link>
 
       <Link
         href="/signup"
-        className="rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white hover:bg-green-700"
+        className="shrink-0 rounded-lg bg-green-600 px-2 py-1.5 text-xs font-medium text-white transition hover:bg-green-700 sm:px-3 sm:py-2 sm:text-sm"
       >
         Sign Up
       </Link>
     </div>
   );
 }
-
