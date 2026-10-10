@@ -20,7 +20,7 @@ export default async function Navbar() {
       <div className="mx-auto max-w-7xl px-4">
         <div className="flex items-center justify-between gap-4 py-4">
           <Link href="/" className="flex items-center gap-2">
-            <span className="text-3xl">🛒</span>
+            <span className=" text-3xl lg:text-5xl  ">🛒</span>
 
             <div>
               <h1 className="text-xl font-bold text-green-700">
