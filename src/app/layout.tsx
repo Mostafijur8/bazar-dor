@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import PriceTicker from "@/components/layout/PriceTicker";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,8 +30,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Navbar />
         <PriceTicker />
         {children}
-        
-        </body>
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            duration: 2000,
+          }}
+        />
+      </body>
     </html>
   );
 }

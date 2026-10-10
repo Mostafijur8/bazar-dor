@@ -1,5 +1,10 @@
+
 import Link from "next/link";
-import { getProductsByCategory } from "@/lib/api";
+import { notFound } from "next/navigation";
+import {
+  getAllCategories,
+  getProductsByCategory,
+} from "@/lib/api";
 import type { Product } from "@/types/product";
 import CategoryProducts from "@/components/category/CategoryProducts";
 
@@ -7,17 +12,44 @@ type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export default async function CategoryPage({ params }: PageProps) {
+export default async function CategoryPage({
+  params,
+}: PageProps) {
   const { slug } = await params;
 
-  let products: Product[] = [];
+  // Valid categories fetch করা
+  let categories;
+
+  try {
+    const response = await getAllCategories();
+
+    categories = Array.isArray(response)
+      ? response
+      : response.data ?? [];
+  } catch {
+    throw new Error("Categories load করা যায়নি।");
+  }
+
+  // Slug valid কি না যাচাই করা
+  const categoryExists = categories.some(
+    (category: { slug: string }) => category.slug === slug
+  );
+
+  if (!categoryExists) {
+    notFound();
+  }
+
+  // Category অনুযায়ী products fetch করা
+  let products: Product[];
 
   try {
     const response = await getProductsByCategory(slug);
 
-    products = Array.isArray(response) ? response : (response.data ?? []);
+    products = Array.isArray(response)
+      ? response
+      : response.data ?? [];
   } catch {
-    products = [];
+    throw new Error("Category products load করা যায়নি।");
   }
 
   const category = products[0];
@@ -32,10 +64,16 @@ export default async function CategoryPage({ params }: PageProps) {
       </Link>
 
       <div className="mb-8 rounded-2xl bg-green-50 p-6 sm:p-8">
-        <p className="text-4xl">{category?.categoryIcon ?? "🛒"}</p>
+        <p className="text-4xl">
+          {category?.categoryIcon ?? "🛒"}
+        </p>
 
         <h1 className="mt-3 text-2xl font-bold text-gray-900 sm:text-3xl">
-          {category?.categoryNameBn ?? "পণ্যের ক্যাটাগরি"}
+          {category?.categoryNameBn ??
+            categories.find(
+              (item: { slug: string }) => item.slug === slug
+            )?.nameBn ??
+            "পণ্যের ক্যাটাগরি"}
         </h1>
 
         <p className="mt-2 text-gray-600">
@@ -47,3 +85,4 @@ export default async function CategoryPage({ params }: PageProps) {
     </main>
   );
 }
+

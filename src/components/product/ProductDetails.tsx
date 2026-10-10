@@ -58,6 +58,7 @@ export default function ProductDetails({ product }: { product: Product }) {
       <PriceSummary product={product} />
 
       <BazarPrices product={product} />
+      
     </main>
   );
 }
