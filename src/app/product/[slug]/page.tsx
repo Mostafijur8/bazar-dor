@@ -1,4 +1,3 @@
-
 import { notFound, redirect } from "next/navigation";
 import { headers } from "next/headers";
 
@@ -12,9 +11,7 @@ type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export default async function ProductPage({
-  params,
-}: PageProps) {
+export default async function ProductPage({ params }: PageProps) {
   // User Sign In করেছে কি না যাচাই
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -30,14 +27,10 @@ export default async function ProductPage({
   // সব product fetch করা
   const response = await getAllProducts();
 
-  const products: Product[] = Array.isArray(response)
-    ? response
-    : response.data ?? [];
+  const products: Product[] = await getAllProducts();
 
   // Slug অনুযায়ী product খোঁজা
-  const product = products.find(
-    (item) => item.slug === slug
-  );
+  const product = products.find((item) => item.slug === slug);
 
   // Product না পাওয়া গেলে 404
   if (!product) {
@@ -46,4 +39,3 @@ export default async function ProductPage({
 
   return <ProductDetails product={product} />;
 }
-

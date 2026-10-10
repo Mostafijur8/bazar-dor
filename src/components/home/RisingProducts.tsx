@@ -4,9 +4,7 @@ import ProductCard from "@/components/product/ProductCard";
 
 export default async function RisingProducts() {
   const response = await getAllProducts();
-  const products: Product[] = Array.isArray(response)
-    ? response
-    : (response.data ?? []);
+const products = await getAllProducts();
 
   const risingProducts = products
     .filter((product) => product.change.dir === "up")

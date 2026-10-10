@@ -17,20 +17,16 @@ export default async function CategoryPage({
 }: PageProps) {
   const { slug } = await params;
 
-  // Valid categories fetch করা
+  // Fetch all categories
   let categories;
 
   try {
-    const response = await getAllCategories();
-
-    categories = Array.isArray(response)
-      ? response
-      : response.data ?? [];
+    categories = await getAllCategories();
   } catch {
     throw new Error("Categories load করা যায়নি।");
   }
 
-  // Slug valid কি না যাচাই করা
+  // Check whether category exists
   const categoryExists = categories.some(
     (category: { slug: string }) => category.slug === slug
   );
@@ -39,23 +35,23 @@ export default async function CategoryPage({
     notFound();
   }
 
-  // Category অনুযায়ী products fetch করা
+  // Fetch products by category
   let products: Product[];
 
   try {
-    const response = await getProductsByCategory(slug);
-
-    products = Array.isArray(response)
-      ? response
-      : response.data ?? [];
+    products = await getProductsByCategory(slug);
   } catch {
     throw new Error("Category products load করা যায়নি।");
   }
 
   const category = products[0];
 
+  const categoryInfo = categories.find(
+    (item: { slug: string }) => item.slug === slug
+  );
+
   return (
-    <main className="mx-auto min-h-screen max-w-7xl px-4 py-10">
+    <main className="mx-auto min-h-screen max-w-7xl px-4 py-8 sm:py-10">
       <Link
         href="/"
         className="mb-6 inline-block text-sm text-green-700 hover:underline"
@@ -63,20 +59,19 @@ export default async function CategoryPage({
         ← হোম পেজ
       </Link>
 
-      <div className="mb-8 rounded-2xl bg-green-50 p-6 sm:p-8">
-        <p className="text-4xl">
+      <div className="mb-8 rounded-2xl bg-green-50 p-5 sm:p-8">
+        <p className="text-3xl sm:text-4xl">
           {category?.categoryIcon ?? "🛒"}
         </p>
 
         <h1 className="mt-3 text-2xl font-bold text-gray-900 sm:text-3xl">
           {category?.categoryNameBn ??
-            categories.find(
-              (item: { slug: string }) => item.slug === slug
-            )?.nameBn ??
+            categoryInfo?.nameBn ??
+            categoryInfo?.title ??
             "পণ্যের ক্যাটাগরি"}
         </h1>
 
-        <p className="mt-2 text-gray-600">
+        <p className="mt-2 text-sm text-gray-600 sm:text-base">
           এই ক্যাটাগরির পণ্যের আজকের বাজারদর দেখুন।
         </p>
       </div>

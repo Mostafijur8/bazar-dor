@@ -4,10 +4,9 @@ import ProductCard from "@/components/product/ProductCard";
 
 export default async function AllProducts() {
   const response = await getAllProducts();
+  
 
-  const products: Product[] = Array.isArray(response)
-    ? response
-    : (response.data ?? []);
+const products = await getAllProducts();
 
   return (
     <section id="সব-পণ্য" className="mx-auto max-w-7xl px-4 py-12">

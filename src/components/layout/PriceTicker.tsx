@@ -6,10 +6,7 @@ import TickerItems from "./TickerItems";
 
 export default async function PriceTicker() {
   const response = await getAllProducts();
-
-  const products: Product[] = Array.isArray(response)
-    ? response
-    : (response.data ?? []);
+const products = await getAllProducts();
 
   return (
     <div className="overflow-hidden border-b border-gray-200 bg-green-50">
