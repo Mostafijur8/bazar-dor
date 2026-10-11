@@ -18,7 +18,7 @@ export default function BazarPrices({
 
       {markets.length > 0 ? (
         <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
-          <table className="w-full min-w-[480px] text-left text-xs sm:min-w-0 sm:text-sm">
+          <table className="w-full min-w-[300px] text-left text-xs sm:min-w-0 sm:text-sm">
             <thead className="bg-gray-800 text-white">
               <tr>
                 <th className="px-2 py-3 font-semibold sm:px-4">
