@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import PriceTicker from "@/components/layout/PriceTicker";
 import { Toaster } from "react-hot-toast";
+import Footer from "@/components/layout/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,15 +28,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Navbar />
-        <PriceTicker />
-        {children}
-        <Toaster
-          position="top-center"
-          toastOptions={{
-            duration: 5000,
-          }}
-        />
+        <div>
+          <Navbar />
+          <PriceTicker />
+          {children}
+          <Toaster
+            position="top-center"
+            toastOptions={{
+              duration: 5000,
+            }}
+          />
+          <Footer />
+        </div>
       </body>
     </html>
   );
