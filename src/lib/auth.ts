@@ -1,9 +1,17 @@
+
+
+
 // import { betterAuth } from "better-auth";
 // import { mongodbAdapter } from "better-auth/adapters/mongodb";
 // import { MongoClient } from "mongodb";
 
-// const mongoClient = new MongoClient(process.env.MONGODB_URI!);
+// const mongoUri = process.env.MONGODB_URI;
 
+// if (!mongoUri) {
+//   throw new Error("MONGODB_URI is not configured");
+// }
+
+// const mongoClient = new MongoClient(mongoUri);
 // const mongoDb = mongoClient.db("bazar-dor");
 
 // export const auth = betterAuth({
@@ -43,6 +51,11 @@ const mongoDb = mongoClient.db("bazar-dor");
 
 export const auth = betterAuth({
   database: mongodbAdapter(mongoDb),
+
+  trustedOrigins: [
+    "http://localhost:3000",
+    "https://bazar-dor-sepia-nine.vercel.app",
+  ],
 
   emailAndPassword: {
     enabled: true,
